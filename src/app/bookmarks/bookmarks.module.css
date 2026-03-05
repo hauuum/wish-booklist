@@ -1,0 +1,130 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #FBF7F4;
+  box-shadow: 0 1px 8px var(--shadow);
+}
+.headerWrap {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bToBack {
+  position: absolute;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--text);
+  padding: 0.5rem 0.875rem;
+  border: 1.5px solid var(--border);
+  transition: all 0.2s;
+}
+.bToBack:hover {
+  color: #000;
+  border-color: #000;
+}
+
+.logo {
+  height: 68px;
+  text-align: center;
+}
+.logo img {
+  width: auto;
+  height: 100%;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink-light);
+  border-bottom: 1px solid var(--border);
+}
+
+.search {
+  padding: 2rem 1rem 1rem;
+}
+.searchField {
+  position: relative;
+  max-width: 600px;
+  gap: 0;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+.searchField::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  background: url(/images/ico-search.svg) center center no-repeat;
+  background-size: contain;
+  transform: translateY(-50%);
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  padding: 5rem 1rem;
+  color: var(--ink-faint);
+}
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+.empty p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* Bookmark List */
+.bookmarkList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+@media screen and (max-width: 750px) {
+  .headerWrap {
+    padding: 0 1rem;
+  }
+  .header .logo {
+    height: 48px;
+  }
+  .header .bToBack {
+    left: 16px;
+  }
+  .header .bToBack span {
+    display: none;
+  }
+  .content {
+    padding: 2rem 1rem 4rem;
+  }
+  .search {
+    padding: 2rem 1rem 1rem;
+  }
+  .search-text {
+    font-size: 0.9375rem;
+  }
+  .bookmarkList {
+    grid-template-columns: repeat(1, minmax(auto, 420px));
+    justify-content: center;
+  }
+}

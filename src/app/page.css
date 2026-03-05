@@ -1,0 +1,239 @@
+@import './globals.css';
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #FBF7F4;
+  box-shadow: 0 1px 8px var(--shadow);
+}
+.header-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-wrap .logo {
+  height: 68px;
+}
+.header-wrap .logo img {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+.header-wrap .b-togo {
+  position: relative;
+  padding: 0.5rem 1rem;
+  background: var(--pointred);
+  color: var(--white);
+}
+.header-wrap .num {
+  background: var(--white);
+  color: var(--pointred);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.1rem 0.25rem;
+  border-radius: 99px;
+  line-height: 1.4;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Search */
+.search {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.search-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 2rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
+}
+.search-field {
+  position: relative;
+  max-width: 600px;
+  gap: 0;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px var(--shadow);
+}
+.search-field::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  background: url(/images/ico-search.svg) center center no-repeat;
+  background-size: contain;
+  transform: translateY(-50%);
+}
+
+/* Spinner */
+.spinner-wrap {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.spinner-wrap .spinner {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border: 4px solid rgba(141, 213, 186, 0.4);
+  border-top-color: var(--lightblue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Content */
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.error {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 2px;
+  padding: 1rem 1.25rem;
+  color: #B91C1C;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--ink-faint);
+}
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+.empty p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink-light);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.result h2 {
+  font-size: 1.25rem;
+}
+.result .b-more {
+  padding: 0.5rem 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+.result strong {
+  font-size: 0.875rem !important;
+  color: var(--ink);
+}
+.result span {
+  font-size: 1rem;
+}
+.result-num {
+  font-size: 0.875rem !important;
+  font-weight: 400;
+}
+
+.book-list {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  margin-top: 2.5rem;
+}
+.pagination .b-page {
+  width: 36px;
+  height: 36px;
+  font-size: 0.82rem;
+  color: var(--text);
+  border-radius: 50%;
+  background: var(--lightblue);
+  transition: all 0.2s;
+}
+.pagination .b-page:hover:not(:disabled) {
+  background: rgba(141, 213, 186, 0.4);
+}
+.pagination .b-page:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.pagination .numbers-wrap {
+  display: flex;
+  gap: 0.375rem;
+}
+.pagination .b-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 0.82rem;
+  color: var(--text);
+  background: var(--lightblue);
+  transition: all 0.2s;
+}
+.pagination .b-num:not(.active):hover {
+  background: rgba(141, 213, 186, 0.4);
+}
+.pagination .b-num.active {
+  border: 2px dashed #77b19b;
+  background: #f2ebe1;
+  color: #77b19b;
+}
+
+@media screen and (max-width: 750px) {
+  .header-wrap {
+    padding: 0 1rem;
+  }
+  .header .logo {
+    height: 48px;
+  }
+  .content {
+    padding: 2rem 1rem 4rem;
+  }
+  .search {
+    padding: 2rem 1rem 1rem;
+  }
+  .search-text {
+    font-size: 0.9375rem;
+  }
+  .book-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pagination {
+    flex-wrap: wrap;
+  }
+}

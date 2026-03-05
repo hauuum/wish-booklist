@@ -1,0 +1,168 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 23, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.modal {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  padding: 2rem 1.5rem;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(28, 25, 23, 0.2);
+  border-top: 4px solid var(--amber);
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.mark {
+  position: absolute;
+  display: block;
+  top: -16px;
+  left: 55%;
+  font-size: 2rem;
+  transform: translateX(-50%);
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--pointred);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.2em;
+  color: var(--text);
+  line-height: 1.36;
+}
+
+.author {
+  font-size: 0.85rem;
+  color: var(--pale);
+  margin-bottom: 1.75rem;
+}
+.author span {
+  position: relative;
+  padding-left: 12px;
+}
+.author span::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 1.5px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.memo {
+  position: relative;
+  margin-bottom: 1.75rem;
+}
+.memo .textarea {
+  width: 100%;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.875rem 0.875rem 1.5rem;
+  font-size: 0.9rem;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  line-height: 1.4;
+}
+.memo .textarea:focus {
+  border-color: var(--amber);
+}
+.memo .textarea::placeholder {
+  color: var(--pale);
+}
+.memo .count {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--pale);
+}
+
+.btnWrap {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.btnWrap .bCancel {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--ink-light);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  transition: all 0.2s;
+}
+.btnWrap .bCancel:hover {
+  border-color: #000;
+  color: #000;
+}
+.btnWrap .bSave {
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--white);
+  border: 1px solid var(--white);
+  background: var(--pointred);
+  border-radius: 6px;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.btnWrap .bSave:hover {
+  border: 1px solid var(--pointred);
+  background: var(--white);
+  color: var(--pointred);
+}
+
+@media screen and (max-width: 750px) {
+  .modal {
+    padding: 1.5rem 0.75rem;
+  }
+  .title {
+    font-size: 1rem;
+  }
+  .author {
+    margin-bottom: 1rem;
+  }
+  .memo {
+    margin-bottom: 1.25rem;
+  }
+}

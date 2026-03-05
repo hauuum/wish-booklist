@@ -1,0 +1,139 @@
+/* FONT */
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 400;
+    font-display: swap;
+    src: local("Pretendard Regular"), url(/font/Pretendard/Pretendard-Regular.woff2) format("woff2"), url(/font/Pretendard/Pretendard-Regular.woff) format("woff");
+}
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 600;
+    font-display: swap;
+    src: local("Pretendard SemiBold"), url(/font/Pretendard/Pretendard-SemiBold.woff2) format("woff2"), url(/font/Pretendard/Pretendard-SemiBold.woff) format("woff");
+}
+@font-face {
+    font-family: "Pretendard";
+    font-weight: 700;
+    font-display: swap;
+    src: local("Pretendard Bold"), url(/font/Pretendard/Pretendard-Bold.woff2) format("woff2"), url(/font/Pretendard/Pretendard-Bold.woff) format("woff");
+}
+
+:root {
+    --border: #D6D0C4;
+    --cream: #F2EBE1;
+    --white: #F8F9FA;
+    --pointred: #FF6B6B;
+    --lightyellow: #FFF9DB;
+    --lightblue: #8dd5ba;
+    --text: #212529;
+    --ink: #4e4e4e;
+    --pale: #8e8e8e;
+    --shadow: rgba(28, 25, 23, 0.08);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+     scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: "Pretendard";
+    font-weight: 400;
+    min-height: 100vh;
+    line-height: 1.4;
+}
+
+/* Grain texture overlay */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+input, textarea {
+    font-family: inherit;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+
+/* add style */
+.wrap {
+    min-height: 100vh;
+}
+
+.sr-only {
+	position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+[class^=b-] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.b-normal {
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border-radius: 8px;
+}
+
+.input {
+    width: 100%;
+    padding: .9rem 3rem .9rem 1.25rem;
+    font-size: 0.95rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+}
+.input:focus {
+    border-color: var(--amber);
+}
+.input::placeholder {
+    color: var(--pale);
+}
