@@ -103,14 +103,11 @@ export default function BookmarksPage() {
 
                 {/* Content */}
                 <section className='content'>
-                {entries.length > 0 && (
-                    <p className={styles.result}>
-                        {entries.length === 0
-                            ? ''
-                            : `총 ${entries.length}권의 책을 저장하고 있어요`
-                        }
-                    </p>
-                )}
+                    {entries.length > 0 && filtered.length > 0 && (
+                        <p className={styles.result}>
+                        총 {entries.length}권의 책을 저장하고 있어요
+                        </p>
+                    )}
                     <div className={styles.bookmarkList}>
                         {filtered.map(([key, book]) => (
                             <BookmarkCard
