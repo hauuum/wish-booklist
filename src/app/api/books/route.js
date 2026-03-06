@@ -1,3 +1,4 @@
+// 앤티티코드 문자열 변환
 const decodeEntities = (text) => {
   if (!text) return '';
   return text
@@ -8,6 +9,7 @@ const decodeEntities = (text) => {
     .replace(/&#183;/g, '·').replace(/&middot;/g, '·');
 };
 
+// 특수문자 변환
 const sanitizeQuery = (query) => {
   return query
     .replace(/[:\.\[\]()'"""''·]/g, ' ')
@@ -15,6 +17,7 @@ const sanitizeQuery = (query) => {
     .trim();
 };
 
+// 검색어를 기준으로 데이터 파싱 
 const parseXmlBooks = (xmlText) => {
   const totalMatch = xmlText.match(/<list_total_count>(\d+)<\/list_total_count>/);
   const totalCount = totalMatch ? parseInt(totalMatch[1]) : 0;
@@ -46,6 +49,7 @@ const parseXmlBooks = (xmlText) => {
   return { totalCount, code, rows };
 };
 
+// 검색결과를 다시 원래 검색어 기준으로 정렬해서 가장 알맞은 책이 최상단으로 뿌려줌
 const sortByRelevance = (rows, originalQuery) => {
   const terms = sanitizeQuery(originalQuery)
     .split(' ').filter(Boolean).map((t) => t.toLowerCase());
@@ -70,32 +74,46 @@ const sortByRelevance = (rows, originalQuery) => {
     .map(({ _score, ...book }) => book);
 };
 
+// 검색어 Fallback (앞 단어부터 줄여가면서 검색함)
 const fetchWithFallback = async (query, start, end, apiKey) => {
   const terms = sanitizeQuery(query).split(' ').filter(Boolean);
 
-  for (let i = terms.length; i >= 1; i--) {
-    const shortQuery = terms.slice(0, i).join(' ');
-    const url = `http://openapi.seoul.go.kr:8088/${apiKey}/xml/SeoulLibraryBookSearchInfo/${start}/${end}/${encodeURIComponent(shortQuery)}`;
-
-    console.log(`🔍 검색 시도 (${i}단어): "${shortQuery}"`);
-
+  const tryFetch = async (searchQuery) => {
+    const url = `http://openapi.seoul.go.kr:8088/${apiKey}/xml/SeoulLibraryBookSearchInfo/${start}/${end}/${encodeURIComponent(searchQuery)}`;
+    console.log(`🔍 검색 시도: "${searchQuery}"`);
     const res = await fetch(url);
-    if (!res.ok) continue;
-
+    if (!res.ok) return null;
     const xmlText = await res.text();
     const { totalCount, code, rows } = parseXmlBooks(xmlText);
-
     if (code !== 'INFO-200' && rows.length > 0) {
-      console.log(`✅ 성공: "${shortQuery}" → ${rows.length}건`);
+      console.log(`✅ 성공: "${searchQuery}" → ${rows.length}건`);
       return { totalCount, rows };
     }
+    return null;
+  };
+
+  // 1단계: 전체 쿼리 시도
+  const fullResult = await tryFetch(terms.join(' '));
+  if (fullResult) return fullResult;
+
+  // 2단계: 앞에서 단어 줄여가며 시도 (3단어 이상일 때)
+  for (let i = terms.length - 1; i >= 2; i--) {
+    const result = await tryFetch(terms.slice(0, i).join(' '));
+    if (result) return result;
+  }
+
+  // 3단계: 개별 단어를 긴 것부터 시도 (가장 특징적인 단어 우선)
+  const sortedTerms = [...terms].sort((a, b) => b.length - a.length);
+  for (const term of sortedTerms) {
+    const result = await tryFetch(term);
+    if (result) return result;
   }
 
   return { totalCount: 0, rows: [] };
 };
 
 // 썸네일 URL 크기 업스케일
-// ✅ 변경 — fname 파라미터에서 원본 이미지 URL 직접 추출
+// 변경 — fname 파라미터에서 원본 이미지 URL 직접 추출
 const upscaleThumbnail = (url) => {
   if (!url) return '';
   try {
@@ -135,7 +153,7 @@ const fetchCoverFromKakao = async (isbn) => {
   }
 };
 
-// 5개씩 병렬 배치 처리
+// 카카오 API로 표지 이미지를 가져올 때 5개씩 병렬 배치 처리
 const fetchCoversInBatches = async (books, batchSize = 5) => {
   const results = [];
   for (let i = 0; i < books.length; i += batchSize) {
