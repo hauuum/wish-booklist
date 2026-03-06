@@ -76,40 +76,50 @@ const sortByRelevance = (rows, originalQuery) => {
 
 // 검색어 Fallback (앞 단어부터 줄여가면서 검색함)
 const fetchWithFallback = async (query, start, end, apiKey) => {
-  const terms = sanitizeQuery(query).split(' ').filter(Boolean);
+    const terms = sanitizeQuery(query).split(' ').filter(Boolean);
 
-  const tryFetch = async (searchQuery) => {
-    const url = `http://openapi.seoul.go.kr:8088/${apiKey}/xml/SeoulLibraryBookSearchInfo/${start}/${end}/${encodeURIComponent(searchQuery)}`;
-    console.log(`🔍 검색 시도: "${searchQuery}"`);
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const xmlText = await res.text();
-    const { totalCount, code, rows } = parseXmlBooks(xmlText);
-    if (code !== 'INFO-200' && rows.length > 0) {
-      console.log(`✅ 성공: "${searchQuery}" → ${rows.length}건`);
-      return { totalCount, rows };
+    const tryFetch = async (searchQuery) => {
+      const url = `http://openapi.seoul.go.kr:8088/${apiKey}/xml/SeoulLibraryBookSearchInfo/${start}/${end}/${encodeURIComponent(searchQuery)}`;
+      console.log(`🔍 검색 시도: "${searchQuery}"`);
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const xmlText = await res.text();
+      const { totalCount, code, rows } = parseXmlBooks(xmlText);
+      if (code !== 'INFO-200' && rows.length > 0) {
+        console.log(`✅ 성공: "${searchQuery}" → ${rows.length}건`);
+        return { totalCount, rows };
+      }
+      return null;
+    };
+
+    // 반환된 결과 중 검색어 단어가 실제로 포함된 책이 있는지 확인
+    const hasRelevantResult = (rows, terms) => {
+      return rows.some((book) => {
+        const title = (book.TITLE || '').toLowerCase();
+        return terms.some((t) => title.includes(t.toLowerCase()));
+      });
+    };
+
+    // 1단계: 전체 쿼리 시도 + 관련도 검증
+    const fullResult = await tryFetch(terms.join(' '));
+    if (fullResult && hasRelevantResult(fullResult.rows, terms)) {
+      return fullResult;
     }
-    return null;
-  };
 
-  // 1단계: 전체 쿼리 시도
-  const fullResult = await tryFetch(terms.join(' '));
-  if (fullResult) return fullResult;
+    // 2단계: 앞에서 단어 줄여가며 시도 (3단어 이상일 때)
+    for (let i = terms.length - 1; i >= 2; i--) {
+      const result = await tryFetch(terms.slice(0, i).join(' '));
+      if (result && hasRelevantResult(result.rows, terms)) return result;
+    }
 
-  // 2단계: 앞에서 단어 줄여가며 시도 (3단어 이상일 때)
-  for (let i = terms.length - 1; i >= 2; i--) {
-    const result = await tryFetch(terms.slice(0, i).join(' '));
-    if (result) return result;
-  }
+    // 3단계: 개별 단어를 긴 것부터 시도 (가장 특징적인 단어 우선)
+    const sortedTerms = [...terms].sort((a, b) => b.length - a.length);
+    for (const term of sortedTerms) {
+      const result = await tryFetch(term);
+      if (result) return result; // 개별 단어는 검증 없이 반환
+    }
 
-  // 3단계: 개별 단어를 긴 것부터 시도 (가장 특징적인 단어 우선)
-  const sortedTerms = [...terms].sort((a, b) => b.length - a.length);
-  for (const term of sortedTerms) {
-    const result = await tryFetch(term);
-    if (result) return result;
-  }
-
-  return { totalCount: 0, rows: [] };
+    return { totalCount: 0, rows: [] };
 };
 
 // 썸네일 URL 크기 업스케일
